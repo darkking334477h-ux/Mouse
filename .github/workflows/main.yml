@@ -43,8 +43,24 @@ jobs:
           gradle-version: '8.7'
 
       - name: Build debug APK
+        shell: bash
         working-directory: ${{ steps.loc.outputs.dir }}
-        run: gradle assembleDebug --no-daemon
+        run: |
+          gradle assembleDebug --no-daemon --console=plain --stacktrace 2>&1 | tee "$GITHUB_WORKSPACE/build.log"
+
+      - name: Show errors (only if build failed)
+        if: failure()
+        shell: bash
+        run: |
+          echo "=========== ERROR SUMMARY ==========="
+          grep -nE "error:|What went wrong|Execution failed|AAPT|Caused by|FAILURE|not found|Could not" -A4 build.log | head -80 || true
+
+      - name: Save full log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-log
+          path: build.log
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
