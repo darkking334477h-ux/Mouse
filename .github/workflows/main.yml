@@ -10,6 +10,29 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Locate project
+        id: loc
+        run: |
+          set -e
+          echo "Files in repository:"
+          ls -la
+          if [ -f settings.gradle ]; then
+            DIR=.
+          elif [ -d MouseCorsulApp ]; then
+            DIR=MouseCorsulApp
+          else
+            ZIP=$(find . -maxdepth 3 -iname '*.zip' | head -n 1)
+            if [ -z "$ZIP" ]; then
+              echo "ERROR: no project zip found in the repository. Upload MouseCorsul_Source.zip to the repository root."
+              exit 1
+            fi
+            echo "Using zip: $ZIP"
+            unzip -o "$ZIP" -d project
+            DIR=$(dirname "$(find project -name settings.gradle | head -n 1)")
+          fi
+          echo "Project dir: $DIR"
+          echo "dir=$DIR" >> "$GITHUB_OUTPUT"
+
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -19,15 +42,12 @@ jobs:
         with:
           gradle-version: '8.7'
 
-      - name: Unpack project
-        run: unzip -o MouseCorsul_Source.zip -d project
-
       - name: Build debug APK
-        working-directory: project/MouseCorsulApp
+        working-directory: ${{ steps.loc.outputs.dir }}
         run: gradle assembleDebug --no-daemon
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: MouseCorsul-APK
-          path: project/MouseCorsulApp/app/build/outputs/apk/debug/*.apk
+          path: ${{ steps.loc.outputs.dir }}/app/build/outputs/apk/debug/*.apk
