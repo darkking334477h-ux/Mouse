@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">MouseCorsul</string>
+    <string name="service_label">MouseCorsul Touchpad</string>
+    <string name="accessibility_description">Lets MouseCorsul perform taps, long presses, scrolls and drags at the position of its on-screen cursor when you use the virtual touchpad. It does not read your screen content. It only starts working after you press Start inside the app.</string>
+
+    <!-- Main screen -->
+    <string name="btn_overlay_permission">1. Grant overlay permission</string>
+    <string name="btn_accessibility_settings">2. Open accessibility settings</string>
+    <string name="btn_start">3. Start mouse</string>
+    <string name="btn_stop">Stop mouse</string>
+    <string name="help_text">How to use:\n1. Grant the overlay permission.\n2. Open accessibility settings, find MouseCorsul Touchpad and turn it on.\n3. Come back here and press Start.\n\nTouchpad panel:\n- One finger moves the cursor.\n- Tap = click.\n- Hold finger still = right click (long press).\n- Two fingers up/down = scroll.\n- Buttons: Click, Double, Right, Drag (toggle), scroll up/down, Stop.\n- Drag: turn Drag ON, then touch the pad and move your finger. The drag starts at the cursor.\n- Move the panel by dragging its title bar.\n\nNote: Android has no real right mouse button, so Right click is a long press.</string>
+
+    <!-- Floating panel -->
+    <string name="panel_title">MouseCorsul - drag here to move</string>
+    <string name="panel_click">Click</string>
+    <string name="panel_double">Double</string>
+    <string name="panel_right">Right</string>
+    <string name="panel_drag_off">Drag: OFF</string>
+    <string name="panel_drag_on">Drag: ON</string>
+    <string name="panel_scroll_up">&#9650;</string>
+    <string name="panel_scroll_down">&#9660;</string>
+    <string name="panel_stop">Stop</string>
+
+    <!-- Messages -->
+    <string name="msg_overlay_granted">Overlay permission is already granted</string>
+    <string name="msg_need_overlay">Grant the overlay permission first</string>
+    <string name="msg_need_accessibility">Turn on MouseCorsul Touchpad in accessibility settings first</string>
+    <string name="msg_service_not_connected">Service is not connected yet. Turn it off and on again in accessibility settings</string>
+    <string name="msg_started">Mouse started</string>
+    <string name="msg_start_failed">Could not start the mouse</string>
+    <string name="msg_stopped">Mouse stopped</string>
+    <string name="msg_not_running">Mouse is not running</string>
+
+</resources>
