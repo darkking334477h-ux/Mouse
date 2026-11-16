@@ -6,6 +6,13 @@ on:
   push:
     branches:
       - main
+    paths:
+      - '**.java'
+      - '**.xml'
+      - '**.gradle'
+      - 'gradle.properties'
+      - 'settings.gradle'
+      - '.github/workflows/main.yml'
 
 permissions:
   contents: read
@@ -16,10 +23,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Setup JDK
+      - name: Setup JDK 17
         uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -28,27 +35,34 @@ jobs:
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
 
-      - name: Install SDK Packages
+      - name: Install Android SDK
         run: |
-          sdkmanager --install \
-            "platform-tools" \
-            "platforms;android-35" \
-            "build-tools;35.0.0"
+          sdkmanager "platform-tools" "platforms;android-35" "build-tools;35.0.0"
 
-      - name: Verify Project
+      - name: Check Android Project
         run: |
+          echo "Checking project files..."
           test -f settings.gradle
           test -f app/build.gradle
           test -f app/src/main/AndroidManifest.xml
+          echo "Android project structure OK"
 
-      - name: Build APK
+      - name: Grant Execute Permission
         run: |
-          chmod +x gradlew
-          ./gradlew :app:assembleDebug \
-            --no-daemon \
-            --stacktrace
+          if [ -f gradlew ]; then
+            chmod +x gradlew
+          fi
+
+      - name: Build Debug APK
+        run: |
+          if [ -f gradlew ]; then
+            ./gradlew :app:assembleDebug --no-daemon --stacktrace
+          else
+            gradle :app:assembleDebug --no-daemon --stacktrace
+          fi
 
       - name: Upload APK
+        if: success()
         uses: actions/upload-artifact@v4
         with:
           name: MouseCorsul-APK
